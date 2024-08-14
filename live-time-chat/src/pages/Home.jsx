@@ -4,8 +4,8 @@ import './Home.css'
 const Home = () => {
   return (
     <>
-    <div>
-      <h1 class="text-8xl font-bold underline text-blue-800">Test</h1>
+    <div class="w-100 h-screen flex justify-center items-center">
+      <h1 class="text-8xl font-bold text-purple flex items-center bg-cream">Test</h1>
     </div>
     </>
   )
