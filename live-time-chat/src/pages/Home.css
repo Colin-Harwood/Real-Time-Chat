@@ -1,9 +1,7 @@
 body {
-    width: screen;
-    justify-content: center;
-    color: red;
+    background-color: #EEEEEE;
 }
 
 h1 {
-    background-color: brown;
+    background-color: white;
 }
