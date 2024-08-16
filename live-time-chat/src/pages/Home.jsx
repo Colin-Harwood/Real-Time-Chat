@@ -22,7 +22,7 @@ const Home = () => {
     <>
     <div class="w-100 h-screen flex justify-center items-center grid grid-cols-2">
       <div class="flex items-center justify-center h-full">
-        <div class="h-1/2 w-1/2 bg-cream text-center">
+        <div class="h-1/2 w-1/2 bg-cream text-center flex flex-col justify-around items-center">
           <h1 class="text-8xl font-bold text-purple">Join</h1>
           <form onSubmit={handleSubmit} className="flex flex-col items-center">
             <input
@@ -42,9 +42,9 @@ const Home = () => {
         </div>
       </div>
       <div class="flex items-center justify-center h-full">
-        <div class="h-1/2 w-1/2 bg-cream text-center">
-          <h1 class="text-8xl font-bold text-purple">Create</h1>
-          <button onClick={handleCreateChat} className="bg-purple text-white p-4 rounded text-xl font-bold hover: transition">
+        <div class="h-1/2 w-1/2 bg-cream text-center flex flex-col justify-around items-center">
+          <h1 class="text-8xl font-bold text-purple ">Create</h1>
+          <button onClick={handleCreateChat} className="bg-purple text-white p-4 rounded text-xl font-bold hover: transition w-2/3">
             Create Chat
           </button>
         </div>
