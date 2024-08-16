@@ -2,3 +2,10 @@ body {
     background-color: #134B70;
 }
 
+button {
+    transition: transform 0.3s ease-in-out;
+}
+  
+button:hover {
+    transform: scale(1.1); /* Increases the button size by 10% */
+}

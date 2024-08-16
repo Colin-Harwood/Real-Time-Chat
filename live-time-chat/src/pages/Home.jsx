@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 const Home = () => {
 
   const [code, setCode] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -12,6 +13,10 @@ const Home = () => {
       navigate(`/${code}`); // Navigate to the entered code route
     }
   };
+
+  const handleCreateChat = () => {
+    navigate('/chat')
+  }
 
   return (
     <>
@@ -39,6 +44,9 @@ const Home = () => {
       <div class="flex items-center justify-center h-full">
         <div class="h-1/2 w-1/2 bg-cream text-center">
           <h1 class="text-8xl font-bold text-purple">Create</h1>
+          <button onClick={handleCreateChat} className="bg-purple text-white p-4 rounded text-xl font-bold hover: transition">
+            Create Chat
+          </button>
         </div>
       </div>
     </div>
