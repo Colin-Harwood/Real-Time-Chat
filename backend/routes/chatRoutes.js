@@ -36,4 +36,29 @@ router.get('/:chatCode', async (req, res) => {
   }
 });
 
+router.post('/:chatCode', async (req, res) => {
+  const { chatCode } = req.params;
+
+  try {
+    // Find the chat room by the provided chat code
+    const chat = await Chat.findOne({ chatCode });
+    if (!chat) {
+      return res.status(404).json({ message: 'Chat room not found' });
+    }
+
+    // Update the chat room with the new message
+    await Chat.findOneAndUpdate(
+      { chatCode }, // Filter by chat code
+      { $push: { messages: { sender: '1', text: 'success' } } }, // Push the new message to the messages array
+      { new: true } // Return the updated document
+    );
+
+    res.status(200).json({ message: 'Message added successfully' });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+
 module.exports = router;
