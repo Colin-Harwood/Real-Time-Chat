@@ -3,9 +3,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+const cors = require('cors');
 const chatRoutes = require('./routes/chatRoutes');
-
-
 
 
 // Load environment variables
@@ -16,6 +15,8 @@ const PORT = process.env.PORT || 5000;
 
 // Middleware to parse JSON
 app.use(express.json());
+
+app.use(cors());
 
 // MongoDB Connection
 mongoose
