@@ -41,26 +41,31 @@ router.post('/:chatCode', async (req, res) => {
   const { message, user } = req.body;
 
   try {
-    // Find the chat room by the provided chat code
     const chat = await Chat.findOne({ chatCode });
     if (!chat) {
       return res.status(404).json({ message: 'Chat room not found' });
     }
 
-    // Determine the senderID by counting existing users
-    const existingUsers = new Set(chat.messages.map(msg => msg.sender));
-    const senderID = existingUsers.size + 1;
+    const newMessage = { sender: user, text: message };
 
-    // Add the new message with the assigned sender ID
-    chat.messages.push({ sender: `${user}`, text: message });
-    await chat.save();
+    const updatedChat = await Chat.findOneAndUpdate(
+      { chatCode },
+      { $push: { messages: newMessage } },
+      { new: true }
+    );
 
-    res.status(200).json({ message: 'Message added successfully', chat });
+    // Emit only the new message via Socket.IO
+    const io = req.app.get('io');
+    io.to(chatCode).emit('newMessage', newMessage);
+
+    res.status(200).json({ message: 'Message added successfully' });
   } catch (error) {
-    console.error(error);
+    console.log(error);
     res.status(500).json({ message: 'Server error' });
   }
 });
+
+
 
 
 module.exports = router;

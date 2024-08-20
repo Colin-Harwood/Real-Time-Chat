@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import { io } from 'socket.io-client';
 import './Chat.css';
+
+const socket = io('http://localhost:5000');
 
 const Chat = () => {
   const { chatCode } = useParams(); // Get the chat code from the URL
@@ -11,6 +14,11 @@ const Chat = () => {
   const [message, setMessage] = useState('');
 
   useEffect(() => {
+    if (!localStorage.getItem('senderID')) {
+      const uniqueID = `User-${Math.random().toString(36).slice(2, 9)}`; // Generate a random unique ID
+      localStorage.setItem('senderID', uniqueID);
+    }
+
     // Fetch the chat data when the component loads
     const fetchChat = async () => {
       try {
@@ -25,11 +33,20 @@ const Chat = () => {
 
     fetchChat();
 
-    // Check if the user has a unique sender ID in local storage
-    if (!localStorage.getItem('senderID')) {
-      const uniqueID = `User-${Math.random().toString(36).slice(2, 9)}`; // Generate a random unique ID
-      localStorage.setItem('senderID', uniqueID);
-    }
+    // Join the chat room
+    socket.emit('joinRoom', chatCode);
+
+    // Listen for new messages
+    socket.on('newMessage', (newMessage) => {
+      setChat((prevChat) => ({
+        ...prevChat,
+        messages: [...prevChat.messages, newMessage],
+      }));
+    });
+  
+    return () => {
+      socket.off('newMessage');
+    };
   }, [chatCode]);
 
   const sendMessage = async (e) => {
