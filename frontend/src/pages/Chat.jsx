@@ -58,12 +58,16 @@ const Chat = () => {
         )}
       </div>
       <div>
-        <form>
+        <form
+           onSubmit={(e) => {
+            e.preventDefault();
+             sendMessage(message, '2')}}
+        >
           <input 
             placeholder='Enter a message here...'
             onChange={(e) => setMessage(e.target.value)}
           />
-          <button type="submit" onSubmit={sendMessage(message, '2')}>
+          <button type="submit">
             Submit message
           </button>
         </form>
