@@ -38,9 +38,8 @@ router.get('/:chatCode', async (req, res) => {
 
 router.post('/:chatCode', async (req, res) => {
   const { chatCode } = req.params;
-  console.log(req.body);
-  console.log(req.body.message);
-  console.log(req.body.user);
+  const { message, user } = req.body;
+
   try {
     // Find the chat room by the provided chat code
     const chat = await Chat.findOne({ chatCode });
@@ -48,16 +47,17 @@ router.post('/:chatCode', async (req, res) => {
       return res.status(404).json({ message: 'Chat room not found' });
     }
 
-    // Update the chat room with the new message
-    await Chat.findOneAndUpdate(
-      { chatCode }, // Filter by chat code
-      { $push: { messages: { sender: req.body.user, text: req.body.message } } }, // Push the new message to the messages array
-      { new: true } // Return the updated document
-    );
+    // Determine the senderID by counting existing users
+    const existingUsers = new Set(chat.messages.map(msg => msg.sender));
+    const senderID = existingUsers.size + 1;
 
-    res.status(200).json({ message: 'Message added successfully' });
+    // Add the new message with the assigned sender ID
+    chat.messages.push({ sender: `${user}`, text: message });
+    await chat.save();
+
+    res.status(200).json({ message: 'Message added successfully', chat });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     res.status(500).json({ message: 'Server error' });
   }
 });
