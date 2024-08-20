@@ -38,7 +38,9 @@ router.get('/:chatCode', async (req, res) => {
 
 router.post('/:chatCode', async (req, res) => {
   const { chatCode } = req.params;
-
+  console.log(req.body);
+  console.log(req.body.message);
+  console.log(req.body.user);
   try {
     // Find the chat room by the provided chat code
     const chat = await Chat.findOne({ chatCode });
@@ -49,7 +51,7 @@ router.post('/:chatCode', async (req, res) => {
     // Update the chat room with the new message
     await Chat.findOneAndUpdate(
       { chatCode }, // Filter by chat code
-      { $push: { messages: { sender: '1', text: 'success' } } }, // Push the new message to the messages array
+      { $push: { messages: { sender: req.body.user, text: req.body.message } } }, // Push the new message to the messages array
       { new: true } // Return the updated document
     );
 

@@ -31,8 +31,8 @@ const Chat = () => {
     try {
       console.log(message, user)
       axios.post(`http://localhost:5000/api/chats/${chatCode}`, {
-        'message': {message},
-        'user': {user}
+        'message': message,
+        'user': user
       })
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to send message');
